@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This repo reproduces the issue in https://github.com/moove-it/sidekiq-scheduler/issues/354
 
-Things you may want to cover:
+## Running
 
-* Ruby version
+```
+docker-compose build
 
-* System dependencies
+docker-compose run web db:create
 
-* Configuration
+docker-compose up
+```
 
-* Database creation
+## Notes
 
-* Database initialization
+Some observations from testing to recreate this issue:
 
-* How to run the test suite
+ - the Rails env must be `production`.
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ - the schedule must be set in a separate YAML file and added to Sidekiq as part of the initializer
+   with `reload_schedule!`. I could not recreate the `NotImplementedError` issue when using the
+   `:schedule` key in `config/sidekiq.yml`
